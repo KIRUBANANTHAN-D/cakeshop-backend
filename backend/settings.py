@@ -9,7 +9,7 @@ SECRET_KEY = 'django-insecure-r33w6uj$%*9k$14o9nss@%_#6zahp!$+5z+s*5%2nu_u^7^*g&
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["cakeshop-backend-2026.onrender.com"]
 
 
 INSTALLED_APPS = [
