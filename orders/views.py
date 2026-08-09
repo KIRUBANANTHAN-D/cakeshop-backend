@@ -3,9 +3,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Category, Cake, Branch, Order
 from .serializers import CakeSerializer, OrderSerializer
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import permission_classes
 from django.http import JsonResponse
+from .ai import ask_gemini
 import json
 import uuid
 
@@ -68,11 +69,12 @@ def branch_list(request):
     return Response(data)
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def orders_api(request):
     serializer = OrderSerializer(data=request.data)
 
     if serializer.is_valid():
-        order = serializer.save() 
+        order = serializer.save(user=request.user)
 
         return Response(
             {
@@ -86,10 +88,25 @@ def orders_api(request):
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def my_orders(request):
+    orders = Order.objects.filter(
+        user=request.user
+    ).order_by("-created_at")
+
+    serializer = OrderSerializer(
+        orders,
+        many=True
+    )
+
+    return Response(serializer.data)
+
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def order_detail_api(request, id):
     try:
-        order = Order.objects.get(id=id)
+        order = Order.objects.get(id=id,user=request.user)
         serializer = OrderSerializer(order)
         return Response(serializer.data)
     except Order.DoesNotExist:
@@ -105,3 +122,17 @@ def cancel_order(request, pk):
         return Response({"message": "Order cancelled"})
     except Order.DoesNotExist:
         return Response({"error": "Order not found"}, status=404)
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def ai_chat(request):
+    message = request.data.get("message")
+
+    if not message:
+        return Response({"error": "Message is required"}, status=400)
+
+    reply = ask_gemini(message)
+
+    return Response({
+        "reply": reply
+    })

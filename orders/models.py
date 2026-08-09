@@ -47,7 +47,6 @@ class Order(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name="orders",
         null=True,
         blank=True
     )
@@ -77,3 +76,4 @@ class Order(models.Model):
 
     def __str__(self):
         return self.order_no
+    

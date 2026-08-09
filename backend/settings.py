@@ -1,15 +1,21 @@
 from pathlib import Path
 from datetime import timedelta
 import os
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv(BASE_DIR / ".env")
 
 SECRET_KEY = 'django-insecure-r33w6uj$%*9k$14o9nss@%_#6zahp!$+5z+s*5%2nu_u^7^*g&'
 
 DEBUG = True
 
-ALLOWED_HOSTS = ["cakeshop-backend-2026.onrender.com"]
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    "cakeshop-backend-2026.onrender.com",
+]
 
 
 INSTALLED_APPS = [
@@ -19,12 +25,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'rest_framework',
     'corsheaders',
     'orders',
 ]
-
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -63,12 +67,6 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 import dj_database_url
 import os
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL')
-    )
-}
-
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -105,13 +103,15 @@ REST_FRAMEWORK = {
 }
 
 
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-    'AUTH_HEADER_TYPES': ('Bearer',),
-}
-
 import dj_database_url
 
 DATABASES = {
     'default': dj_database_url.config(default='sqlite:///db.sqlite3')
+}
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
 }
