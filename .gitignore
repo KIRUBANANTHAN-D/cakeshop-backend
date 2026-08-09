@@ -1,25 +1,5 @@
-.env
 .venv/
+.env
 __pycache__/
 *.pyc
 db.sqlite3
-# Django
-*.log
-staticfiles/
-static/
-media/
-*.sqlite3
-
-# Python
-*.pyo
-*.pyd
-*.egg-info/
-*.egg
-build/
-dist/
-.eggs/
-*.whl
-.idea/
-.vscode/
-.DS_Store
-*.sqlite3
