@@ -1,4 +1,5 @@
 from django.urls import path
+from rest_framework_simplejwt.views import TokenRefreshView
 from . import views
 from . import auth_views
 from .views import (
@@ -33,6 +34,7 @@ urlpatterns = [
     path("orders/<int:id>/", order_detail_api),
     path("orders/<int:pk>/cancel/", cancel_order),
     path("register/", auth_views.register),
-path("login/", auth_views.login_user),
-path("profile/", auth_views.profile),
+    path("login/", auth_views.login_user),
+    path("profile/", auth_views.profile),
+    path("token/refresh/", TokenRefreshView.as_view()),
 ]

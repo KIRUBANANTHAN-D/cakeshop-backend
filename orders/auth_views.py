@@ -41,7 +41,14 @@ def register(request):
     )
 
     return Response(
-        {"message": "Registration successful"},
+        {
+            "message": "Registration successful",
+            "user": {
+                "id": user.id,
+                "username": user.username,
+                "email": user.email,
+            },
+        },
         status=status.HTTP_201_CREATED
     )
 
@@ -70,6 +77,11 @@ def login_user(request):
         "refresh": str(refresh),
         "username": user.username,
         "email": user.email,
+        "user": {
+            "id": user.id,
+            "username": user.username,
+            "email": user.email,
+        },
     })
 
 

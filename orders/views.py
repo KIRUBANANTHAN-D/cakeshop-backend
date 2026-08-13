@@ -124,7 +124,7 @@ def cancel_order(request, pk):
         return Response({"error": "Order not found"}, status=404)
 
 @api_view(["POST"])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def ai_chat(request):
     message = request.data.get("message")
 
